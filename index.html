@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Story Quest Premium - เกมนิทานข้อคิด AI</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Particle Background -->
+    <div id="particles-js"></div>
+    
+    <!-- Theme Switcher -->
+    <div class="theme-switcher">
+        <button onclick="toggleTheme()" class="theme-btn">
+            <i class="fas fa-moon" id="themeIcon"></i>
+        </button>
+    </div>
+
+    <!-- Sound Control -->
+    <div class="sound-control">
+        <button onclick="toggleSound()" class="sound-btn">
+            <i class="fas fa-volume-up" id="soundIcon"></i>
+        </button>
+    </div>
+
+    <!-- Main Container -->
+    <div class="game-container premium-container">
+        <div class="header-section">
+            <h1 class="title premium-title">
+                <span class="title-icon">📚</span>
+                <span class="title-text">Story Quest</span>
+                <span class="premium-badge">PREMIUM</span>
+            </h1>
+        </div>
+        
+        <!-- Welcome Screen -->
+        <div class="welcome-screen active">
+            <div class="welcome-content">
+                <div class="avatar-selector">
+                    <h3>เลือกอวาตาร์ของคุณ</h3>
+                    <div class="avatar-grid">
+                        <div class="avatar-item" data-avatar="🦊" onclick="selectAvatar('🦊')">🦊</div>
+                        <div class="avatar-item" data-avatar="🐰" onclick="selectAvatar('🐰')">🐰</div>
+                        <div class="avatar-item" data-avatar="🦁" onclick="selectAvatar('🦁')">🦁</div>
+                        <div class="avatar-item" data-avatar="🐻" onclick="selectAvatar('🐻')">🐻</div>
+                        <div class="avatar-item" data-avatar="🦄" onclick="selectAvatar('🦄')">🦄</div>
+                        <div class="avatar-item" data-avatar="🐉" onclick="selectAvatar('🐉')">🐉</div>
+                    </div>
+                </div>
+                
+                <div class="input-group premium-input">
+                    <label for="playerName">
+                        <i class="fas fa-user"></i> ชื่อผู้เล่น
+                    </label>
+                    <input type="text" id="playerName" placeholder="กรอกชื่อของคุณ..." maxlength="20">
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn premium-btn" onclick="startGame()">
+                        <i class="fas fa-play"></i> เริ่มเกม
+                    </button>
+                    <button class="btn secondary-btn" onclick="showTutorial()">
+                        <i class="fas fa-question-circle"></i> วิธีเล่น
+                    </button>
+                </div>
+                
+                <div class="ai-status premium-status" id="aiStatus">
+                    <span class="status-dot"></span>
+                    <span id="statusText">กำลังตรวจสอบ AI...</span>
+                </div>
+                
+                <!-- Daily Login Bonus -->
+                <div class="daily-bonus" id="dailyBonus" style="display: none;">
+                    <h4>🎁 รางวัลประจำวัน!</h4>
+                    <p>+50 💎 Gems</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Screen -->
+        <div class="category-screen">
+            <div class="player-stats">
+                <div class="stat-item">
+                    <i class="fas fa-star"></i>
+                    <span>Level <span id="playerLevel">1</span></span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-gem"></i>
+                    <span id="playerGems">100</span>
+                </div>
+                <div class="stat-item">
+                    <i class="fas fa-fire"></i>
+                    <span>Streak: <span id="playerStreak">0</span></span>
+                </div>
+            </div>
+            
+            <h2 class="section-title">
+                <i class="fas fa-book-open"></i> เลือกการผจญภัย
+            </h2>
+            
+            <!-- Daily Challenge -->
+            <div class="daily-challenge-card" onclick="startDailyChallenge()">
+                <div class="challenge-info">
+                    <h3><i class="fas fa-calendar-day"></i> ความท้าทายประจำวัน</h3>
+                    <p>เล่นวันนี้รับ x2 คะแนน!</p>
+                </div>
+                <div class="challenge-timer" id="challengeTimer">23:59:59</div>
+            </div>
+            
+            <div class="category-grid premium-grid" id="categoryGrid"></div>
+            
+            <!-- Power-ups Shop -->
+            <div class="powerups-section">
+                <h3><i class="fas fa-magic"></i> ไอเทมพิเศษ</h3>
+                <div class="powerup-grid">
+                    <div class="powerup-item" onclick="buyPowerup('timeFreeze')">
+                        <i class="fas fa-hourglass-half"></i>
+                        <span>หยุดเวลา</span>
+                        <span class="powerup-cost">50 💎</span>
+                    </div>
+                    <div class="powerup-item" onclick="buyPowerup('hint')">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>คำใบ้</span>
+                        <span class="powerup-cost">30 💎</span>
+                    </div>
+                    <div class="powerup-item" onclick="buyPowerup('skip')">
+                        <i class="fas fa-forward"></i>
+                        <span>ข้ามคำถาม</span>
+                        <span class="powerup-cost">40 💎</span>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn premium-btn" onclick="showWelcome()">
+                <i class="fas fa-arrow-left"></i> กลับ
+            </button>
+        </div>
+
+        <!-- Game Screen -->
+        <div class="game-screen">
+            <div class="game-header">
+                <div class="player-info premium-info">
+                    <div class="player-avatar" id="playerAvatar">🦊</div>
+                    <div class="player-details">
+                        <span id="playerDisplay"></span>
+                        <div class="level-bar">
+                            <div class="level-progress" id="levelProgress"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="game-stats">
+                    <div class="stat-bubble">
+                        <i class="fas fa-coins"></i>
+                        <span id="currentScore">0</span>
+                    </div>
+                    <div class="stat-bubble">
+                        <i class="fas fa-heart"></i>
+                        <span id="lives">3</span>
+                    </div>
+                    <div class="stat-bubble">
+                        <i class="fas fa-bolt"></i>
+                        <span id="combo">x1</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="progress-bar premium-progress">
+                <div class="progress-fill" id="progressBar">
+                    <span class="progress-text">1/10</span>
+                </div>
+                <div class="progress-particles"></div>
+            </div>
+
+            <!-- Timer Bar -->
+            <div class="timer-bar" id="timerBar">
+                <div class="timer-fill" id="timerFill"></div>
+                <span class="timer-text" id="timerText">30s</span>
+            </div>
+
+            <div class="story-container premium-story">
+                <div class="story-header">
+                    <h3 id="storyTitle"></h3>
+                    <div class="story-actions">
+                        <button class="action-btn" onclick="useHint()" id="hintBtn">
+                            <i class="fas fa-lightbulb"></i> คำใบ้
+                        </button>
+                        <button class="action-btn" onclick="skipQuestion()" id="skipBtn">
+                            <i class="fas fa-forward"></i> ข้าม
+                        </button>
+                    </div>
+                </div>
+                <div class="story-content">
+                    <div class="story-text" id="storyText"></div>
+                    <div class="question animated" id="questionText"></div>
+                    <div class="options premium-options" id="optionsContainer"></div>
+                </div>
+            </div>
+
+            <div class="loading-overlay" id="loadingOverlay">
+                <div class="premium-loader">
+                    <div class="loader-book">
+                        <div class="loader-page"></div>
+                        <div class="loader-page"></div>
+                        <div class="loader-page"></div>
+                    </div>
+                    <p id="loadingText">AI กำลังสร้างนิทาน...</p>
+                </div>
+            </div>
+
+            <div class="combo-indicator" id="comboIndicator"></div>
+            
+            <button class="btn premium-btn pulse" id="nextBtn" style="display: none;" onclick="nextQuestion()">
+                ถัดไป <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+
+        <!-- Result Screen -->
+        <div class="result-screen">
+            <div class="result-container premium-result">
+                <div class="celebration-animation">
+                    <div class="confetti"></div>
+                    <div class="stars"></div>
+                </div>
+                
+                <h2 class="result-title">
+                    <i class="fas fa-trophy"></i> ผลการเล่น
+                </h2>
+                
+                <div class="result-stats">
+                    <div class="result-score animated" id="finalScore"></div>
+                    <div id="resultMessage"></div>
+                    
+                    <div class="achievement-unlock" id="achievementUnlock" style="display: none;">
+                        <h3>🏆 ปลดล็อคความสำเร็จ!</h3>
+                        <div id="achievementName"></div>
+                    </div>
+                </div>
+                
+                <div class="rewards-section">
+                    <h3>รางวัลที่ได้รับ</h3>
+                    <div class="reward-grid">
+                        <div class="reward-item">
+                            <i class="fas fa-gem"></i>
+                            <span id="gemsEarned">0</span>
+                        </div>
+                        <div class="reward-item">
+                            <i class="fas fa-star"></i>
+                            <span id="expEarned">0</span> EXP
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="moral-lesson premium-moral">
+                    <h3><i class="fas fa-graduation-cap"></i> บทเรียนจากนิทาน</h3>
+                    <p id="moralText"></p>
+                </div>
+                
+                <div class="share-section">
+                    <button class="share-btn" onclick="shareResult()">
+                        <i class="fas fa-share-alt"></i> แชร์ผลลัพธ์
+                    </button>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn premium-btn" onclick="showCategories()">
+                        <i class="fas fa-redo"></i> เล่นใหม่
+                    </button>
+                    <button class="btn secondary-btn" onclick="showLeaderboard()">
+                        <i class="fas fa-crown"></i> อันดับ
+                    </button>
+                    <button class="btn secondary-btn" onclick="showAchievements()">
+                        <i class="fas fa-trophy"></i> ความสำเร็จ
+                    </button>
+                </div>
+
+                <div class="leaderboard premium-leaderboard" id="leaderboard" style="display: none;">
+                    <h3><i class="fas fa-crown"></i> ผู้นำคะแนน</h3>
+                    <div class="leaderboard-tabs">
+                        <button class="tab-btn active" onclick="showLeaderboardTab('daily')">วันนี้</button>
+                        <button class="tab-btn" onclick="showLeaderboardTab('weekly')">สัปดาห์นี้</button>
+                        <button class="tab-btn" onclick="showLeaderboardTab('alltime')">ทั้งหมด</button>
+                    </div>
+                    <div id="leaderboardList"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tutorial Modal -->
+    <div class="modal" id="tutorialModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeTutorial()">&times;</span>
+            <h2><i class="fas fa-book"></i> วิธีเล่น Story Quest</h2>
+            <div class="tutorial-steps">
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <p>เลือกหมวดหมู่นิทานที่ชอบ</p>
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <p>อ่านนิทานและตอบคำถามให้ถูกต้อง</p>
+                </div>
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <p>สะสมคะแนนและปลดล็อคความสำเร็จ</p>
+                </div>
+            </div>
+            <h3>💡 เคล็ดลับพิเศษ</h3>
+            <ul>
+                <li>ตอบเร็วรับคะแนนโบนัส!</li>
+                <li>ตอบถูกติดต่อกันรับ Combo Multiplier</li>
+                <li>ใช้ไอเทมพิเศษเมื่อจำเป็น</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Achievement Modal -->
+    <div class="modal" id="achievementModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAchievements()">&times;</span>
+            <h2><i class="fas fa-trophy"></i> ความสำเร็จ</h2>
+            <div class="achievement-grid" id="achievementGrid"></div>
+        </div>
+    </div>
+
+    <!-- Audio Elements -->
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="config.js"></script>
+    <script src="ai-service.js"></script>
+    <script src="premium.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
