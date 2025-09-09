@@ -36,3 +36,6 @@ story-quest-ai/
 ├── premium.js # ระบบ Premium: Combo, Power-ups, Daily Challenge
 ├── ai-service.js # ติดต่อกับ AI, สร้างนิทานและคำถาม
 ├── stories.json # ฐานข้อมูลนิทานตัวอย่าง
+
+## Screenshots
+<img width="1901" height="1023" alt="จจจ" src="https://github.com/user-attachments/assets/b9fcd8c7-02ad-4886-91ee-4c2ff6570c25" />
