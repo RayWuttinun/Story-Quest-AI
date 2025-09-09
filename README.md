@@ -38,4 +38,10 @@ story-quest-ai/
 ├── stories.json # ฐานข้อมูลนิทานตัวอย่าง
 
 ## Screenshots
+<img width="1512" height="822" alt="จ" src="https://github.com/user-attachments/assets/fb5c3209-0a15-453d-8011-77189a0a3e4f" />
+
+<img width="1358" height="962" alt="จจ" src="https://github.com/user-attachments/assets/184856a0-f5d8-4ade-802b-da878f556e15" />
+
 <img width="1901" height="1023" alt="จจจ" src="https://github.com/user-attachments/assets/b9fcd8c7-02ad-4886-91ee-4c2ff6570c25" />
+
+
